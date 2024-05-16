@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import numpy as np
 import pickle
 from waitress import serve
+import os  # Import os to access environment variables
 
 app = Flask(__name__)
 model = pickle.load(open('model.pkl', 'rb'))
@@ -24,5 +25,6 @@ def predict():
         return render_template('index.html', prediction=f'Error: {str(e)}')
 
 if __name__ == '__main__':
-    # Use Waitress to serve the app, you can adjust the port as needed
-    serve(app, host="0.0.0.0", port=8080)
+    # Use Waitress to serve the app and use the PORT environment variable from Heroku
+    port = int(os.environ.get('PORT', 5000))  # Default to 5000 if no PORT variable is set
+    serve(app, host="0.0.0.0", port=port)
