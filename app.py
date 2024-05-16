@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import numpy as np
 import pickle
+from waitress import serve
 
 app = Flask(__name__)
 model = pickle.load(open('model.pkl', 'rb'))
@@ -23,4 +24,5 @@ def predict():
         return render_template('index.html', prediction=f'Error: {str(e)}')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Use Waitress to serve the app, you can adjust the port as needed
+    serve(app, host="0.0.0.0", port=8080)
